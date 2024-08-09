@@ -59,8 +59,8 @@ pkgs.stdenvNoCC.mkDerivation rec {
       desktopName = "SourceGit";
       comment = "Open-source GUI client for git users";
       categories = [ "Development" ];
-      exec = "${appimageContents}/usr/bin/${exeName} %U";
-      icon = "${appimageContents}/com.sourcegit-scm.SourceGit.png";
+      exec = "${exeName} %U";
+      icon = "${exeName}";
       terminal = false;
       type = "Application";
     })
@@ -73,9 +73,10 @@ pkgs.stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib,themes}
+    mkdir -p $out/{bin,lib,themes,/share/icons/hicolor/256x256/apps}
     cp -rv ${appimageContents}/usr/bin/*.so $out/lib
     cp -rv ${appimageContents}/usr/bin/${exeName} $out/bin
+    cp -rv ${appimageContents}/com.sourcegit-scm.SourceGit.png $out/share/icons/hicolor/256x256/apps/${exeName}.png
     cp -rv ${themes}/themes/*.json $out/themes
 
     echo "LD_LIBRARY_PATH = ${libraryPath}"
