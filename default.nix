@@ -16,6 +16,7 @@ let
     xdg-utils
   ];
 
+  # https://github.com/sourcegit-scm/sourcegit
   src = pkgs.fetchurl {
     url = "https://github.com/sourcegit-scm/sourcegit/releases/download/v${version}/sourcegit-${version}.linux.x86_64.AppImage";
     hash = "sha256-FozCsk7HwCXKQwC/+72j1IM8d3G6rvNCaxoTePad10s=";
@@ -23,6 +24,14 @@ let
 
   appimageContents = pkgs.appimageTools.extractType2 {
     inherit pname version src;
+  };
+
+  # https://github.com/sourcegit-scm/sourcegit-theme
+  themes = pkgs.fetchFromGitHub {
+    owner = "sourcegit-scm";
+    repo = "sourcegit-theme";
+    rev = "09f67cd29124717ae7ce5d70ae436ba505fdd459";
+    sha256 = "sha256-netHt8xbAK4K7Hzi9booV0uldii8IYNBHRgMLEojE8w=";
   };
 in
 pkgs.stdenvNoCC.mkDerivation rec {
@@ -57,14 +66,20 @@ pkgs.stdenvNoCC.mkDerivation rec {
     })
   ];
 
+  # preBuild = ''
+  #   addAutoPatchelfSearchPath ${pkgs.icu}/lib
+  # '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
-    cp -rv usr/bin/*.so $out/lib
-    cp -rv usr/bin/${exeName} $out/bin
+    mkdir -p $out/{bin,lib,themes}
+    cp -rv ${appimageContents}/usr/bin/*.so $out/lib
+    cp -rv ${appimageContents}/usr/bin/${exeName} $out/bin
+    cp -rv ${themes}/themes/*.json $out/themes
 
-    echo "${libraryPath}"
+    echo "LD_LIBRARY_PATH = ${libraryPath}"
+    echo "PATH = ${binaryPath}"
 
     runHook postInstall
   '';
