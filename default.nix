@@ -1,11 +1,31 @@
-{ pkgs ? import <nixpkgs> { } }:
+# $> nix-build
+# { pkgs ? import <nixpkgs> { } }:
+
+# $> nix-build -E 'with import <nixpkgs> {}; callPackage ./default.nix {}'
+{ lib
+, stdenvNoCC
+, appimageTools
+, copyDesktopItems
+, fetchFromGitHub
+, fetchurl
+, fontconfig
+, git
+, git-credential-manager
+, glibc
+, gnupg
+, icu
+, makeDesktopItem
+, makeWrapper
+, openssh
+, xdg-utils
+}:
 
 let
   pname = "sourcegit";
   version = "8.24";
   exeName = "${pname}";
 
-  dependencies = with pkgs; [
+  dependencies = [
     fontconfig
     git
     git-credential-manager
@@ -17,44 +37,44 @@ let
   ];
 
   # https://github.com/sourcegit-scm/sourcegit
-  src = pkgs.fetchurl {
+  src = fetchurl {
     url = "https://github.com/sourcegit-scm/sourcegit/releases/download/v${version}/sourcegit-${version}.linux.x86_64.AppImage";
     hash = "sha256-FozCsk7HwCXKQwC/+72j1IM8d3G6rvNCaxoTePad10s=";
   };
 
-  appimageContents = pkgs.appimageTools.extractType2 {
+  appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
   # https://github.com/sourcegit-scm/sourcegit-theme
-  themes = pkgs.fetchFromGitHub {
+  themes = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit-theme";
     rev = "09f67cd29124717ae7ce5d70ae436ba505fdd459";
     sha256 = "sha256-netHt8xbAK4K7Hzi9booV0uldii8IYNBHRgMLEojE8w=";
   };
 in
-pkgs.stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit version pname;
   src = appimageContents;
 
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
-  buildInputs = with pkgs; [ ] ++ dependencies;
+  buildInputs = [ ] ++ dependencies;
 
-  libraryPath = pkgs.lib.makeLibraryPath ([
+  libraryPath = lib.makeLibraryPath ([
     "$out"
   ] ++ dependencies);
 
-  binaryPath = pkgs.lib.makeBinPath ([
+  binaryPath = lib.makeBinPath ([
     "$out"
   ] ++ dependencies);
 
   desktopItems = [
-    (pkgs.makeDesktopItem {
+    (makeDesktopItem {
       name = "SourceGit";
       desktopName = "SourceGit";
       comment = "Open-source GUI client for git users";
@@ -91,7 +111,7 @@ pkgs.stdenvNoCC.mkDerivation rec {
       --prefix PATH ${binaryPath}
   '';
 
-  meta = with pkgs.lib; {
+  meta = with lib; {
     description = "Opensource Git GUI client";
     homepage = "https://github.com/sourcegit-scm/sourcegit";
     changelog = "https://github.com/sourcegit-scm/sourcegit/releases/tag/v${version}";
