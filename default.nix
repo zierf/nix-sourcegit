@@ -1,6 +1,3 @@
-# $> nix-build
-# { pkgs ? import <nixpkgs> { } }:
-
 # $> nix-build -E 'with import <nixpkgs> {}; callPackage ./default.nix {}'
 { lib
 , stdenvNoCC
@@ -86,10 +83,6 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
-  # preBuild = ''
-  #   addAutoPatchelfSearchPath ${pkgs.icu}/lib
-  # '';
-
   installPhase = ''
     runHook preInstall
 
@@ -105,10 +98,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  # PATH has to be prefixed to find system executables for filemanager, terminal and difftools (like VSCode)
   postFixup = ''
     wrapProgram $out/bin/${exeName} \
       --set LD_LIBRARY_PATH ${libraryPath} \
-      --prefix PATH ${binaryPath}
+      --prefix PATH : ${binaryPath}
   '';
 
   meta = with lib; {
