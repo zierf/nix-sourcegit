@@ -86,7 +86,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib,themes,/share/icons/hicolor/256x256/apps}
+    mkdir -p $out/{bin,lib,themes,share/icons/hicolor/256x256/apps}
     cp -rv ${appimageContents}/usr/bin/*.so $out/lib
     cp -rv ${appimageContents}/usr/bin/${exeName} $out/bin
     cp -rv ${appimageContents}/com.sourcegit-scm.SourceGit.png $out/share/icons/hicolor/256x256/apps/${exeName}.png
