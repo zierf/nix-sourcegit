@@ -19,7 +19,7 @@
 
 let
   pname = "sourcegit";
-  version = "8.24";
+  version = "8.25";
   exeName = "${pname}";
 
   dependencies = [
@@ -36,7 +36,7 @@ let
   # https://github.com/sourcegit-scm/sourcegit
   src = fetchurl {
     url = "https://github.com/sourcegit-scm/sourcegit/releases/download/v${version}/sourcegit-${version}.linux.x86_64.AppImage";
-    hash = "sha256-FozCsk7HwCXKQwC/+72j1IM8d3G6rvNCaxoTePad10s=";
+    hash = "sha256-eL2Pp05w1HcK6+XKIvYYVXOJmr+KnYe3Xrlh2Kq6yo8=";
   };
 
   appimageContents = appimageTools.extractType2 {
