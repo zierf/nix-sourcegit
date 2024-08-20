@@ -19,7 +19,7 @@
 
 let
   pname = "sourcegit";
-  version = "8.25";
+  version = "8.26";
   exeName = "${pname}";
 
   dependencies = [
@@ -35,8 +35,8 @@ let
 
   # https://github.com/sourcegit-scm/sourcegit
   src = fetchurl {
-    url = "https://github.com/sourcegit-scm/sourcegit/releases/download/v${version}/sourcegit-${version}.linux.x86_64.AppImage";
-    hash = "sha256-eL2Pp05w1HcK6+XKIvYYVXOJmr+KnYe3Xrlh2Kq6yo8=";
+    url = "https://github.com/sourcegit-scm/sourcegit/releases/download/v${version}/sourcegit-${version}.linux.amd64.AppImage";
+    hash = "sha256-NEbEoyjfMo3CEriDdb0QcGDSBbNZsiH39X71/QZL6Xs=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -87,9 +87,9 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/{bin,lib,themes,share/icons/hicolor/256x256/apps}
-    cp -rv ${appimageContents}/usr/bin/*.so $out/lib
-    cp -rv ${appimageContents}/usr/bin/${exeName} $out/bin
-    cp -rv ${appimageContents}/com.sourcegit-scm.SourceGit.png $out/share/icons/hicolor/256x256/apps/${exeName}.png
+    cp -rv ${appimageContents}/opt/sourcegit/*.so $out/lib
+    cp -rv ${appimageContents}/opt/sourcegit/${exeName} $out/bin
+    cp -rv ${appimageContents}/com.sourcegit_scm.SourceGit.png $out/share/icons/hicolor/256x256/apps/${exeName}.png
     cp -rv ${themes}/themes/*.json $out/themes
 
     echo "LD_LIBRARY_PATH = ${libraryPath}"
