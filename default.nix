@@ -19,7 +19,7 @@
 
 let
   pname = "sourcegit";
-  version = "8.26";
+  version = "8.27";
   exeName = "${pname}";
 
   dependencies = [
@@ -36,7 +36,7 @@ let
   # https://github.com/sourcegit-scm/sourcegit
   src = fetchurl {
     url = "https://github.com/sourcegit-scm/sourcegit/releases/download/v${version}/sourcegit-${version}.linux.amd64.AppImage";
-    hash = "sha256-NEbEoyjfMo3CEriDdb0QcGDSBbNZsiH39X71/QZL6Xs=";
+    hash = "sha256-wfywmtpRauaTu7cE6GFDeZlGoWYwcRK7d8LmRIfsuKs=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -47,8 +47,8 @@ let
   themes = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit-theme";
-    rev = "09f67cd29124717ae7ce5d70ae436ba505fdd459";
-    sha256 = "sha256-netHt8xbAK4K7Hzi9booV0uldii8IYNBHRgMLEojE8w=";
+    rev = "bf091f15944af2b2452c7c2ca3186fe7f7ed2a44";
+    sha256 = "sha256-cbBdA5WDe7OBQd6IIShWGYfSSzjsgDX2r4Ro2Skngak=";
   };
 in
 stdenvNoCC.mkDerivation rec {
