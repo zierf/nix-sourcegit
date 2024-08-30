@@ -47,8 +47,8 @@ let
   themes = fetchFromGitHub {
     owner = "sourcegit-scm";
     repo = "sourcegit-theme";
-    rev = "bf091f15944af2b2452c7c2ca3186fe7f7ed2a44";
-    sha256 = "sha256-cbBdA5WDe7OBQd6IIShWGYfSSzjsgDX2r4Ro2Skngak=";
+    rev = "91ff0eb84bba286795a67e1f3168e07c6faec326";
+    sha256 = "sha256-77Nhc1hc0ULIffI6Rh2sS0D02xXAfzyKwxW9NkMT6no=";
   };
 in
 stdenvNoCC.mkDerivation rec {
